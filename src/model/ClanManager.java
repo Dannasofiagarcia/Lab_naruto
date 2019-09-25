@@ -25,7 +25,7 @@ public class ClanManager {
 	public ClanManager() {
 		clans = new ArrayList<Clan>();
 		deserialization();
-		
+
 	}
 
 	// METODOS
@@ -98,19 +98,6 @@ public class ClanManager {
 		}
 	}
 
-	// Metodo para eliminar un clan
-
-	public void delateClan(Clan clan) {
-		if (clan != null) {
-			for (int i = 0; i < clans.size(); i++) {
-				if (clans.get(i).getClanName().equals(clan.getClanName())) {
-					Clan clanEliminar = clans.get(i);
-					clans.remove(clanEliminar);
-				}
-			}
-		}
-	}
-
 	// Metodo para serializar la información del programa
 
 	public void serialization() {
@@ -133,10 +120,13 @@ public class ClanManager {
 			String nombreArchivo = "Naruto.txt";
 			String rutaArchivo = RUTA_DATOS + SP + nombreArchivo;
 			File archivoNaruto = new File(rutaArchivo);
-
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivoNaruto));
-			clans = (ArrayList<Clan>) ois.readObject();
-			ois.close();
+			if (archivoNaruto.exists()) {
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivoNaruto));
+				clans = (ArrayList<Clan>) ois.readObject();
+				ois.close();
+			} else {
+				archivoNaruto.createNewFile();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -145,191 +135,278 @@ public class ClanManager {
 
 	}
 
-	//Metodo para agregar una tecnica a un personaje
-	
+	// Metodo para agregar una tecnica a un personaje
+
 	public void addTechnique(Technique technique, String nameCharacter) {
 		boolean agregado = false;
-		for(int i = 0; i < clans.size() && !agregado; i++) {
-			if(clans.get(i).addTechnique(nameCharacter, technique) == true);
+		for (int i = 0; i < clans.size() && !agregado; i++) {
+			if (clans.get(i).addTechnique(nameCharacter, technique) == true)
+				;
 			agregado = true;
 		}
 	}
-	
-	//Metodo que muestra el nombre de todos los clanes
-	
+
+	// Metodo que muestra el nombre de todos los clanes
+
 	public String showClans() {
 		String msg = "";
-		for(int i = 0; i < clans.size(); i++) {
+		for (int i = 0; i < clans.size(); i++) {
 			msg += clans.get(i).getClanName() + "\n";
 		}
 		return msg;
 	}
-	
-	//Metodo que muestra el nombre de todos los personajes
-	
+
+	// Metodo que muestra el nombre de todos los personajes
+
 	public String showCharactersName() {
 		String msg = "";
-		for(int i = 0; i < clans.size(); i++) {
+		for (int i = 0; i < clans.size(); i++) {
 			msg += clans.get(i).showNameCharacters();
 		}
 		return msg;
 	}
-	
-	//Metodo para eliminar un clan
-	
+
+	// Metodo para eliminar un clan
+
 	public String deleteClan(String name) {
 		String msg = "";
 		boolean deleted = false;
-		for(int i = 0; i < clans.size() && !deleted; i++) {
-			if(clans.get(i).getClanName().equals(name)) {
+		for (int i = 0; i < clans.size() && !deleted; i++) {
+			if (clans.get(i).getClanName().equals(name)) {
 				clans.remove(i);
 				deleted = true;
 			}
 		}
-		if(deleted = true) {
+		if (deleted = true) {
 			msg = "El clan fue eliminado con éxito";
-		}
-		else { 
+		} else {
 			msg = "No fue posible eliminar el clan";
 		}
 		return msg;
 	}
-	
-	//Metodo para eliminar un personaje
-	
+
+	// Metodo para eliminar un personaje
+
 	public String deleteCharacter(String name) throws ExceptionNoExiste {
 		String msg = "";
 		boolean deleted = false;
-		for(int i = 0; i < clans.size() && !deleted; i++) {
-			if(clans.get(i).deleteCharacter(name) == true) {
+		for (int i = 0; i < clans.size() && !deleted; i++) {
+			if (clans.get(i).deleteCharacter(name) == true) {
 				deleted = true;
 			}
 		}
-		if(deleted = true) {
+		if (deleted = true) {
 			msg = "El personaje " + name + " fue eliminado con éxito";
-		}
-		else { 
+		} else {
 			msg = "No fue posible eliminar el personaje";
 		}
 		return msg;
 	}
-	
-	//Metodo para mostrar las tecnicas de un personaje
-	
+
+	// Metodo para mostrar las tecnicas de un personaje
+
 	public String showTechniques(String nameCharacter) {
 		String msg = "";
 		boolean find = false;
-		for(int i = 0; i < clans.size(); i++) {
-			if(clans.get(i).findCharacter(nameCharacter) == true) {
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).findCharacter(nameCharacter) == true) {
 				msg = clans.get(i).showTechniques(nameCharacter);
 			}
 		}
 		return msg;
 	}
-	
-	//Metodo para eliminar una tecnica de un personaje
-	
-	public String deleteTechnique (String nameCharacter, String nameT) {
+
+	// Metodo para eliminar una tecnica de un personaje
+
+	public String deleteTechnique(String nameCharacter, String nameT) {
 		String msg = "";
 		boolean delete = false;
-		for(int i = 0; i < clans.size() && !delete; i++){
-			if(clans.get(i).deleteTechnique(nameCharacter, nameT) == true) {
+		for (int i = 0; i < clans.size() && !delete; i++) {
+			if (clans.get(i).deleteTechnique(nameCharacter, nameT) == true) {
 				delete = true;
-				msg = "La tecnica " + nameT + " fue eliminada correctamente del personaje " + nameCharacter; 
-			}
-			else {
+				msg = "La tecnica " + nameT + " fue eliminada correctamente del personaje " + nameCharacter;
+			} else {
 				msg = "La tecnica no pudo ser eliminada";
 			}
 		}
 		return msg;
 	}
-	
-	//Metodo para cambiarle el nombre a un clan
-	
+
+	// Metodo para cambiarle el nombre a un clan
+
 	public String changeClanName(String nameActual, String newName) {
 		String msg = "";
 		boolean changed = false;
-		for(int i = 0; i < clans.size() && !changed; i++) {
-			if(clans.get(i).getClanName().equals(nameActual)) {
+		for (int i = 0; i < clans.size() && !changed; i++) {
+			if (clans.get(i).getClanName().equals(nameActual)) {
 				clans.get(i).setClanName(newName);
 				changed = true;
 			}
 		}
-		if (changed = true) {
+		if (changed == true) {
 			msg = "El nombre del clan " + nameActual + " fue cambiado exitosamente a " + newName;
-		}
-		else {
+		} else {
 			msg = "El nombre del clan no pudo ser cambiado";
 		}
 		return msg;
 	}
-	
-	//Metodo para cambiarle el nombre a un personaje
-	
+
+	// Metodo para cambiarle el nombre a un personaje
+
 	public String changeCharacterName(String actualName, String newName) {
 		String msg = "";
 		boolean changed = false;
-		for(int i = 0; i < clans.size() && !changed; i++) {
-			if(clans.get(i).changeCharacterName(actualName, newName) == true) {
+		for (int i = 0; i < clans.size() && !changed; i++) {
+			if (clans.get(i).changeCharacterName(actualName, newName) == true) {
 				changed = true;
 				msg = "El nombre del personaje " + actualName + " fue cambiado con exito a " + newName;
 			}
 		}
 		return msg;
 	}
-	
-	//Metodo para cambiarle el poder a un personaje
-	
+
+	// Metodo para cambiarle el poder a un personaje
+
 	public String changeCharacterPower(String actualName, int newPower) {
 		String msg = "";
 		boolean changed = false;
-		for(int i = 0; i < clans.size() && !changed; i++) {
-			if(clans.get(i).changeCharacterPower(actualName, newPower) == true) {
+		for (int i = 0; i < clans.size() && !changed; i++) {
+			if (clans.get(i).changeCharacterPower(actualName, newPower) == true) {
 				changed = true;
 				msg = "El poder del personaje " + actualName + " fue cambiado con exito a " + newPower;
 			}
 		}
 		return msg;
 	}
-	
-	//Metodo para cambiarle el nombre a la tecnica de un personaje
-	
+
+	// Metodo para cambiarle el nombre a la tecnica de un personaje
+
 	public String changeTechniqueName(String characterName, String techniqueActualName, String techniqueNewName) {
 		boolean changed = false;
 		String msg = "";
-		for(int i = 0; i < clans.size(); i++) {
-			if(clans.get(i).changeTechniqueName(characterName, techniqueActualName, techniqueNewName) == true) {
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).changeTechniqueName(characterName, techniqueActualName, techniqueNewName) == true) {
 				changed = true;
 			}
 		}
-		if(changed == true) {
+		if (changed == true) {
 			msg = "El nombre de la tecnica fue cambiado con exito";
-		}
-		else {
+		} else {
 			msg = "El nombre de la tecnica no pudo ser cambiado";
 		}
 		return msg;
 
 	}
-	
-	//Metodo que cambia el poder de la tecnica de un personaje
-	
+
+	// Metodo que cambia el poder de la tecnica de un personaje
+
 	public String changeTechniquePower(String characterName, String techniqueActualName, int techniqueNewPower) {
 		boolean changed = false;
 		String msg = "";
-		for(int i = 0; i < clans.size(); i++) {
-			if(clans.get(i).changeTechniquePower(characterName, techniqueActualName, techniqueNewPower) == true) {
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).changeTechniquePower(characterName, techniqueActualName, techniqueNewPower) == true) {
 				changed = true;
 			}
 		}
-		if(changed == true) {
+		if (changed == true) {
 			msg = "El poder de la tecnica fue cambiado con exito";
-		}
-		else {
+		} else {
 			msg = "El poder de la tecnica no pudo ser cambiado";
 		}
 		return msg;
 	}
-	
-	//Metodo ordenamiento seleccion para ordenar los clanes por nombre
+
+	// Metodo que ordena las tecnicas por el nombre
+
+	public String ordenarTechniques() {
+		String msg = "";
+		msg = "          " + "TECNICAS ORDENADAS POR NOMBRE" + "          " + "\n";
+		msg += "     " + "Nombre de la tecnica" + "     " + "     " + "Poder de la tecnica" + "     " + "\n";
+		for (int i = 0; i < clans.size(); i++) {
+			msg += clans.get(i).ordenarTecnicas();
+		}
+		return msg;
+	}
+
+	// Metodo para ordenar el personaje por el nombre
+
+	public String ordenarPersonajeNombre() {
+		String msg = "";
+		msg = "         " + "PERSONAJES ORDENADOS POR NOMBRE" + "          ";
+		msg += "     " + "Nombre del personaje" + "     " + "     " + "Personalidad del personaje" + "     " + "     "
+				+ "Poder del personaje" + "     " + "\n";
+		for (int i = 0; i < clans.size(); i++) {
+			msg += clans.get(i).ordenarNombreCharacter();
+		}
+		return msg;
+	}
+
+	// Metodo para ordenar los clanes por el nombre usando
+
+	public String ordenarClanNombre() {
+		String msg = "";
+		msg = "          " + "CLANES ORDENADOS POR NOMBRE" + "          " + "\n";
+		msg += "     " + "Nombre del clan" + "     " + "\n";
+		int tamanio = clans.size();
+		Clan[] arregloClanes = new Clan[tamanio];
+		for (int i = 0; i < clans.size(); i++) {
+			arregloClanes[i] = clans.get(i);
+		}
+
+		for (int i = 0; i < arregloClanes.length; i++) {
+			// Verifica si j-1 sea mayor que j
+			for (int j = i; j > 0 && arregloClanes[j - 1].getClanName()
+					.compareToIgnoreCase(arregloClanes[j].getClanName()) > 0; i++) {
+				Clan temp = arregloClanes[j];
+				arregloClanes[j] = arregloClanes[j - 1];
+				arregloClanes[j - 1] = arregloClanes[j];
+			}
+		}
+
+		for (int i = 0; i < arregloClanes.length; i++) {
+			msg += "     " + arregloClanes[i].getClanName() + "     " + "\n";
+		}
+		return msg;
+	}
+
+	// Metodo para buscar una tecnica
+
+	public String searchTechnique(String characterName, String techniqueName) {
+		String msg = "";
+		boolean encontrado = false;
+		for (int i = 0; i < clans.size(); i++) {
+			msg = clans.get(i).searchTechnique(characterName, techniqueName);
+		}
+		return msg;
+	}
+
+	// Metodo para buscar un personaje
+
+	public String searchCharacter(String characterName) {
+		String msg = "";
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).findCharacter(characterName) == true) {
+				msg = clans.get(i).searchCharacter(characterName);
+			}
+		}
+		return msg;
+	}
+
+	// Metodo para buscar un clan
+
+	public String searchClan(String clanName) {
+		String msg = "";
+		boolean encontrado = false;
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).getClanName().equals(clanName)) {
+				msg = "El nombre del clan buscado es " + clans.get(i).getClanName()
+						+ " y se encuentra registrado en el sistema correctamente";
+				encontrado = true;
+			}
+		}
+		if (encontrado == false) {
+			msg = "No se encontro un clan con el nombre dado";
+		}
+		return msg;
+	}
 }

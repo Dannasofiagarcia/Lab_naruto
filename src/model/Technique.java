@@ -1,6 +1,9 @@
 package model;
 
-public class Technique {
+import java.io.Serializable;
+import java.util.*;
+
+public class Technique implements Serializable, Comparator <Technique> {
 
 	// ATRIBUTOS
 
@@ -49,6 +52,11 @@ public class Technique {
 	public void addBefore(Technique technique) {
 		technique.next = next;
 		next = technique;
+	}
+
+	@Override
+	public int compare(Technique primero, Technique segundo) {
+		return primero.getName().compareToIgnoreCase(segundo.getName());
 	}
 	
 

@@ -25,7 +25,7 @@ public class InterfazNaruto {
 	public void showMenu() {
 		int userInput = 0;
 
-		while (userInput != 13) {
+		while (userInput != 18) {
 			showOptions();
 			userInput = lector.nextInt();
 			lector.nextLine();
@@ -264,20 +264,46 @@ public class InterfazNaruto {
 				lector.nextLine();
 
 				if (decisionOrdenamiento == 1) {
-
+					System.out.println(clanManager.ordenarClanNombre());
 				} else if (decisionOrdenamiento == 2) {
-
+					System.out.println(clanManager.ordenarPersonajeNombre());
 				} else if (decisionOrdenamiento == 3) {
-
+					System.out.println(clanManager.ordenarTechniques());
 				}
+			break;
+			
+			case 13:
+				System.out.println("Ingrese el nombre del clan que desea buscar");
+				String clanNameSearch = lector.nextLine();
+				
+				System.out.println(clanManager.searchClan(clanNameSearch));
+			break;
+				
+			
+			case 14:
+				System.out.println("Ingrese el nombre del personaje que desea buscar");
+				String characterNameC = lector.nextLine();
+				
+				System.out.println(clanManager.searchCharacter(characterNameC));
+			break;
+			
+			case 15:
+				System.out.println("Ingrese el nombre del personaje que tiene la tecnica que desea buscar");
+				String characterNameT = lector.nextLine();
+				
+				System.out.println("Ingrese el nombre de la tecnica que desea ver la información");
+				String techniqueNameT = lector.nextLine();
+				
+				System.out.println(clanManager.searchTechnique(characterNameT, techniqueNameT));
+			break;
 
 			case 16:
 				clanManager.serialization();
-				break;
+			break;
 
 			}// Cierra el switch
 
-			if (userInput == 17) {
+			if (userInput == 18) {
 				// Serializamos al momento de que el usuario salga del programa
 				clanManager.serialization();
 			}
@@ -300,13 +326,15 @@ public class InterfazNaruto {
 		System.out.println("12. Ordenar los datos");
 		System.out.println("13. Para buscar un clan por el nombre");
 		System.out.println("14. Para buscar un personaje por el nombre");
-		System.out.println("15. Para ver como una tecnica afecta el poder de un personaje");
-		System.out.println("16. Para guardar la información del programa");
-		System.out.println("17. Salir");
+		System.out.println("15. Para buscar una tecnica por el nombre");
+		System.out.println("16. Para ver como una tecnica afecta el poder de un personaje");
+		System.out.println("17. Para guardar la información del programa");
+		System.out.println("18. Salir");
 	}
 
 	public static void main(String[] args) {
 		InterfazNaruto interfaz = new InterfazNaruto();
+		interfaz.showMenu();
 	}
 
 }

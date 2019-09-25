@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Character {
+public class Character implements Serializable, Comparable<Character> {
 
 	// ATRIBUTOS
 
@@ -256,5 +257,75 @@ public class Character {
 		}
 		return changed;
 	}
+	
+	//Ordenamiento seleccion para ordenar el nombre de las tecnicas
+	
+	public String ordenarNombreTecnicas() {
+		String msg = "";
+		
+		Technique primera = firstTechniques;
+		Technique segunda = firstTechniques.getNext();
+		Technique menor = primera;
+		while(primera != null && segunda != null) {
+			//Verificamos si primera es mayor que segunda
+			if(primera.compare(primera, segunda) > 0) {
+				//Si primera es mayor que segunda quiere decir que el menor es segunda
+				primera.setNext(segunda.getNext());
+				segunda.setNext(primera);
+				segunda = primera.getNext();
+			}
+			else {
+				primera = primera.getNext();
+				segunda = primera.getNext();
+			}
+		}
+		return msg = showTechnique();
+	}
+	
+	//Metodo para mostrar la informacion de las tecnicas ordenadas
+	
+	public String showTechnique() {
+		String msg = "";
+		Technique actual = firstTechniques;
+		while(actual != null) {
+			msg += "     " + actual.getName() + "     " + "     " + actual.getPower() + "     " + "\n";
+			actual = actual.getNext();
+		}
+		return msg;
+	}
+	
+	//Metodo para mostrar la información de una tecnica en especifico
+	
+	public String searchTechnique(String techniqueName) {
+		boolean encontrado = false;
+		String msg = "";
+		Technique actual = firstTechniques;
+		while(actual != null && !encontrado) {
+			if(actual.getName().equals(techniqueName)) {
+				msg = "La informacion de la tecnica buscado es la siguiente \n" + "El nombre de la tecnica es " + actual.getName() + "\n" + "El poder de la tecnia es " + actual.getPower() + "\n";
+				encontrado = true;
+			}
+			else {
+				actual = actual.getNext();
+			}
+		}
+		if(encontrado == false) {
+			msg = "No existe personaje con el nombre ingresado";
+		}
+		return msg;	
+	}
+	
 
+//	//Poderes
+//	@Override
+//	public int compare(Character primero, Character segundo) {
+//		return primero.getPower();
+//	}
+
+	//Nombre
+	@Override
+	public int compareTo(Character character) {
+		return name.compareToIgnoreCase(character.getName());
+	}
+	
 } // Cierra la clase
